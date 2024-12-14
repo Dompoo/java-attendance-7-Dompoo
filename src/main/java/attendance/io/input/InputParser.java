@@ -1,10 +1,20 @@
 package attendance.io.input;
 
-import attendance.common.dto.request.AttendanceFindRequest;
+import attendance.infra.DateTimeConvertor;
+
+import java.time.LocalTime;
 
 public class InputParser {
 	
-	public AttendanceFindRequest parseAttendanceFind(String input) {
-		return new AttendanceFindRequest(input.trim());
+	public String parseNickName(String input) {
+		return input.trim();
+	}
+	
+	public int parseDate(String input) {
+		return Integer.parseInt(input);
+	}
+	
+	public LocalTime parseTime(String input) {
+		return DateTimeConvertor.convertToLocalTime(input);
 	}
 }

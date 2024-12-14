@@ -1,10 +1,7 @@
 package attendance.domain;
 
 import attendance.common.CustomExceptions;
-import attendance.common.dto.AttendanceFindResult;
-import attendance.common.dto.AttendanceFindResults;
-import attendance.common.dto.AttendanceModifyResult;
-import attendance.common.dto.AttendanceResult;
+import attendance.common.dto.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,19 +29,26 @@ public class Crew {
 				.map(Attendance::toAttendanceFindResult)
 				.toList();
 		
-		Map<AttendanceStatus, Long> attendanceStatuseCount = attendanceFindResults.stream()
+		Map<AttendanceStatus, Long> attendanceStatusCount = attendanceFindResults.stream()
 				.map(AttendanceFindResult::attendanceStatus)
-				.collect(Collectors.groupingBy(attendanceStatus ->
-						attendanceStatus,
-						Collectors.counting()));
+				.collect(Collectors.groupingBy(attendanceStatus -> attendanceStatus, Collectors.counting()));
 		
-		return new AttendanceFindResults(attendanceFindResults, attendanceStatuseCount, AttendanceInterview.getInterview(attendanceStatuseCount));
+		return new AttendanceFindResults(attendanceFindResults, attendanceStatusCount, AttendanceInterview.getInterview(attendanceStatusCount));
 	}
 	
 	public AttendanceResult addAttendance(LocalDateTime localDateTime) {
 		Attendance newAttendance = Attendance.from(localDateTime);
 		attendances.add(newAttendance);
 		return newAttendance.toAttendanceResult();
+	}
+	
+	public AttendanceExpellWarningResult getAttendanceExpellWaringResult() {
+		Map<AttendanceStatus, Long> attendanceStatusCount = attendances.stream()
+				.map(Attendance::toAttendanceFindResult)
+				.map(AttendanceFindResult::attendanceStatus)
+				.collect(Collectors.groupingBy(attendanceStatus -> attendanceStatus, Collectors.counting()));
+		
+		return new AttendanceExpellWarningResult(name, attendanceStatusCount.get(AttendanceStatus.결석), attendanceStatusCount.get(AttendanceStatus.지각), AttendanceInterview.getInterview(attendanceStatusCount));
 	}
 	
 	public AttendanceModifyResult modifyAttendance(LocalDate attendanceDate, LocalTime time) {

@@ -1,9 +1,11 @@
 package attendance.infra.repository;
 
 import attendance.common.CustomExceptions;
+import attendance.common.dto.AttendanceExpellWarningResult;
 import attendance.common.dto.AttendanceFindResults;
 import attendance.common.dto.AttendanceModifyResult;
 import attendance.common.dto.AttendanceResult;
+import attendance.domain.AttendanceInterview;
 import attendance.domain.Crew;
 import attendance.infra.database.FileDatabase;
 import attendance.infra.entity.AttendanceEntity;
@@ -54,5 +56,16 @@ public class CrewRepository {
 				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
 		
 		return findCrew.getAttendanceFindResult();
+	}
+	
+	//TODO : 정렬 해야함
+	public List<AttendanceExpellWarningResult> findExpellWarnings() {
+		return crews.stream()
+				.map(Crew::getAttendanceExpellWaringResult)
+				.filter(attendanceExpellWarningResult -> {
+					AttendanceInterview attendanceInterview = attendanceExpellWarningResult.attendanceInterview();
+					return attendanceInterview.equals(AttendanceInterview.면담_대상자) || attendanceInterview.equals(AttendanceInterview.경고_대상자);
+				})
+				.toList();
 	}
 }

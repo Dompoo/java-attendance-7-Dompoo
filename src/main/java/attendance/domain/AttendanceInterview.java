@@ -23,4 +23,8 @@ public enum AttendanceInterview {
 		}
 		return 제적_대상자;
 	}
+	
+	public String getFormattedName() {
+		return name().replaceAll("_", " ");
+	}
 }

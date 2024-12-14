@@ -33,7 +33,7 @@ public class Crew {
 				.map(AttendanceFindResult::attendanceStatus)
 				.collect(Collectors.groupingBy(attendanceStatus -> attendanceStatus, Collectors.counting()));
 		
-		return new AttendanceFindResults(attendanceFindResults, attendanceStatusCount, AttendanceInterview.getInterview(attendanceStatusCount));
+		return new AttendanceFindResults(name, attendanceFindResults, attendanceStatusCount, AttendanceInterview.getInterview(attendanceStatusCount));
 	}
 	
 	public AttendanceResult addAttendance(LocalDateTime localDateTime) {

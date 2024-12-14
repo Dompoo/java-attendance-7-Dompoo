@@ -1,5 +1,6 @@
 package attendance.io.output;
 
+import attendance.common.dto.result.AttendanceFindResults;
 import attendance.common.dto.result.AttendanceModifyResult;
 import attendance.common.dto.result.AttendanceResult;
 import attendance.io.writer.Writer;
@@ -21,6 +22,11 @@ public class OutputHandler {
 	
 	public void handleAttendanceModifyResult(AttendanceModifyResult attendanceModifyResult) {
 		String output = outputParser.parseAttendanceModify(attendanceModifyResult);
+		writer.write(output);
+	}
+	
+	public void handleAttendanceFindResults(AttendanceFindResults attendanceFindResults) {
+		String output = outputParser.parseAttendanceFind(attendanceFindResults);
 		writer.write(output);
 	}
 }

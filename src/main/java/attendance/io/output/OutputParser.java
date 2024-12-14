@@ -12,6 +12,7 @@ import attendance.domain.LegalHolidayCalendar;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +109,7 @@ public class OutputParser {
 	public String parseAttendanceExpellWarnings(List<AttendanceExpellWarningResult> attendanceExpellWarningResults) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("제적 위험자 조회 결과").append("\n");
+		Collections.sort(attendanceExpellWarningResults);
 		for (AttendanceExpellWarningResult attendanceExpellWarningResult : attendanceExpellWarningResults) {
 			stringBuilder.append("- %s: 결석 %d회, 지각 %d회 (%s)".formatted(
 					attendanceExpellWarningResult.nickname(),

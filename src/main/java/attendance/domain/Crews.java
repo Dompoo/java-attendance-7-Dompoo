@@ -46,7 +46,6 @@ public class Crews {
 		return findCrew.getAttendanceFindResult();
 	}
 	
-	// TODO : 정렬
 	public List<AttendanceExpellWarningResult> findExpellWarnings() {
 		return crews.stream()
 				.map(Crew::getAttendanceExpellWaringResult)

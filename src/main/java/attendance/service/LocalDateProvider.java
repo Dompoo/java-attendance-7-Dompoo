@@ -13,4 +13,9 @@ public class LocalDateProvider implements DateProvider {
 	public int dayOfMonth() {
 		return LocalDate.now().getDayOfMonth();
 	}
+	
+	@Override
+	public LocalDate date() {
+		return LocalDate.now();
+	}
 }

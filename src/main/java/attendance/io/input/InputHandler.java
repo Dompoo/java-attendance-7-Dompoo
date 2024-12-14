@@ -7,6 +7,9 @@ import attendance.common.dto.request.AttendanceRequest;
 import attendance.io.reader.Reader;
 import attendance.io.writer.Writer;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class InputHandler {
 	
 	private final Reader reader;
@@ -21,7 +24,7 @@ public class InputHandler {
 		this.inputParser = inputParser;
 	}
 	
-	public AttendanceFeatureCommand handleFeatureSelect(int month, int dayOfMonth) {
+	public AttendanceFeatureCommand handleFeatureSelect(LocalDate localDate) {
 		writer.write("""
 				오늘은 %d월 %d일 토요일입니다. 기능을 선택해 주세요.
 				1. 출석 확인
@@ -29,15 +32,21 @@ public class InputHandler {
 				3. 크루별 출석 기록 확인
 				4. 제적 위험자 확인
 				Q. 종료
-				""".formatted(month, dayOfMonth));
+				""".formatted(localDate.getMonthValue(), localDate.getDayOfMonth()));
 		return AttendanceFeatureCommand.from(reader.readLine());
 	}
 	
-	public AttendanceRequest handleAttendance() {
+	public AttendanceRequest handleAttendance(LocalDate localDate) {
 		writer.write("닉네임을 입력해 주세요.");
-		String input = reader.readLine();
-		inputValidator.validateNickName(input);
-		return new AttendanceRequest(inputParser.parseNickName(input));
+		String nickName = reader.readLine();
+		writer.write("등교 시간을 입력해 주세요.");
+		String time = reader.readLine();
+		inputValidator.validateNickName(nickName);
+		inputValidator.validateTime(time);
+		return new AttendanceRequest(
+				inputParser.parseNickName(nickName),
+				LocalDateTime.of(localDate, inputParser.parseTime(time))
+		);
 	}
 	
 	public AttendanceModifyRequest handleAttendanceModify() {

@@ -6,9 +6,7 @@ import attendance.common.dto.result.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Crew {
@@ -49,10 +47,15 @@ public class Crew {
 	}
 	
 	public AttendanceExpellWarningResult getAttendanceExpellWaringResult() {
-		Map<AttendanceStatus, Long> attendanceStatusCount = attendances.stream()
+		EnumMap<AttendanceStatus, Long> attendanceStatusCount = new EnumMap<>(AttendanceStatus.class);
+		
+		Arrays.stream(AttendanceStatus.values())
+				.forEach(attendance -> attendanceStatusCount.put(attendance, 0L));
+		
+		attendances.stream()
 				.map(Attendance::toAttendanceFindResult)
 				.map(AttendanceFindResult::attendanceStatus)
-				.collect(Collectors.groupingBy(attendanceStatus -> attendanceStatus, Collectors.counting()));
+				.forEach(attendanceStatus -> attendanceStatusCount.put(attendanceStatus, attendanceStatusCount.get(attendanceStatus) + 1));
 		
 		return new AttendanceExpellWarningResult(nickname, attendanceStatusCount.get(AttendanceStatus.결석), attendanceStatusCount.get(AttendanceStatus.지각), AttendanceInterview.getInterview(attendanceStatusCount));
 	}

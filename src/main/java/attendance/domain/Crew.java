@@ -1,7 +1,7 @@
 package attendance.domain;
 
 import attendance.common.CustomExceptions;
-import attendance.common.dto.*;
+import attendance.common.dto.result.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -10,6 +10,10 @@ public enum CustomExceptions {
             "등록되지 않은 닉네임입니다.",
             IllegalArgumentException.class
     ),
+    ILLEGAL_FORMAT(
+            "잘못된 형식을 입력하였습니다.",
+            IllegalArgumentException.class
+    ),
     FILE_NOT_READABLE(
             "파일 읽기 중 오류가 발생했습니다.",
             IllegalStateException.class

@@ -1,10 +1,10 @@
 package attendance.infra.repository;
 
 import attendance.common.CustomExceptions;
-import attendance.common.dto.AttendanceExpellWarningResult;
-import attendance.common.dto.AttendanceFindResults;
-import attendance.common.dto.AttendanceModifyResult;
-import attendance.common.dto.AttendanceResult;
+import attendance.common.dto.result.AttendanceExpellWarningResult;
+import attendance.common.dto.result.AttendanceFindResults;
+import attendance.common.dto.result.AttendanceModifyResult;
+import attendance.common.dto.result.AttendanceResult;
 import attendance.domain.AttendanceInterview;
 import attendance.domain.Crew;
 import attendance.infra.database.FileDatabase;

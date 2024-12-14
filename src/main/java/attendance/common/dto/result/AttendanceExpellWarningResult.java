@@ -1,4 +1,4 @@
-package attendance.common.dto;
+package attendance.common.dto.result;
 
 import attendance.domain.AttendanceInterview;
 

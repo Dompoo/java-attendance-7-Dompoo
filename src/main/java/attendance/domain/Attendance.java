@@ -1,8 +1,8 @@
 package attendance.domain;
 
-import attendance.common.dto.AttendanceFindResult;
-import attendance.common.dto.AttendanceModifyResult;
-import attendance.common.dto.AttendanceResult;
+import attendance.common.dto.result.AttendanceFindResult;
+import attendance.common.dto.result.AttendanceModifyResult;
+import attendance.common.dto.result.AttendanceResult;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,6 +1,7 @@
 package attendance.infra.repository;
 
 import attendance.common.CustomExceptions;
+import attendance.common.dto.AttendanceFindResults;
 import attendance.common.dto.AttendanceModifyResult;
 import attendance.common.dto.AttendanceResult;
 import attendance.domain.Crew;
@@ -36,6 +37,7 @@ public class CrewRepository {
 		return findCrew.addAttendance(attendanceDateTime);
 	}
 	
+	// TODO : 미래 날짜 수정 검증
 	public AttendanceModifyResult modifyAttendance(String name, LocalDate now, int date, LocalTime time) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getName().equals(name))
@@ -43,5 +45,14 @@ public class CrewRepository {
 				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
 		
 		return findCrew.modifyAttendance(now.withDayOfMonth(date), time);
+	}
+	
+	public AttendanceFindResults findAttendancesByName(String name) {
+		Crew findCrew = crews.stream()
+				.filter(crew -> crew.getName().equals(name))
+				.findFirst()
+				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
+		
+		return findCrew.getAttendanceFindResult();
 	}
 }

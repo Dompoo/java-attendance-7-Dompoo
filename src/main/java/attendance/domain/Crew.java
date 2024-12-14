@@ -1,6 +1,8 @@
 package attendance.domain;
 
 import attendance.common.CustomExceptions;
+import attendance.common.dto.AttendanceFindResult;
+import attendance.common.dto.AttendanceFindResults;
 import attendance.common.dto.AttendanceModifyResult;
 import attendance.common.dto.AttendanceResult;
 
@@ -8,6 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Crew {
 	
@@ -23,8 +27,18 @@ public class Crew {
 		return name;
 	}
 	
-	public List<Attendance> getAttendances() {
-		return attendances;
+	public AttendanceFindResults getAttendanceFindResult() {
+		List<AttendanceFindResult> attendanceFindResults = attendances.stream()
+				.map(Attendance::toAttendanceFindResult)
+				.toList();
+		
+		Map<AttendanceStatus, Long> attendanceStatuseCount = attendanceFindResults.stream()
+				.map(AttendanceFindResult::attendanceStatus)
+				.collect(Collectors.groupingBy(attendanceStatus ->
+						attendanceStatus,
+						Collectors.counting()));
+		
+		return new AttendanceFindResults(attendanceFindResults, attendanceStatuseCount, AttendanceInterview.getInterview(attendanceStatuseCount));
 	}
 	
 	public AttendanceResult addAttendance(LocalDateTime localDateTime) {

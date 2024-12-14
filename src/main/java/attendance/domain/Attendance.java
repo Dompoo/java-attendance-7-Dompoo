@@ -1,5 +1,6 @@
 package attendance.domain;
 
+import attendance.common.dto.AttendanceFindResult;
 import attendance.common.dto.AttendanceModifyResult;
 import attendance.common.dto.AttendanceResult;
 
@@ -33,6 +34,10 @@ public class Attendance {
 				afterModifyAttendance.attendanceDateTime.toLocalTime(),
 				afterModifyAttendance.attendanceStatus
 		);
+	}
+	
+	public AttendanceFindResult toAttendanceFindResult() {
+		return new AttendanceFindResult(attendanceDateTime, attendanceStatus);
 	}
 	
 	public boolean isAttendanceDateEquals(LocalDate localDate) {

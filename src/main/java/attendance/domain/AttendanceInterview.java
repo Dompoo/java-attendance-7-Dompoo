@@ -1,6 +1,6 @@
 package attendance.domain;
 
-import java.util.EnumMap;
+import java.util.Map;
 
 public enum AttendanceInterview {
 	
@@ -10,8 +10,8 @@ public enum AttendanceInterview {
 	제적_대상자,
 	;
 	
-	public static AttendanceInterview getInterview(EnumMap<AttendanceStatus, Integer> attendanceStatusCount) {
-		int notComeCount = attendanceStatusCount.get(AttendanceStatus.결석) + (attendanceStatusCount.get(AttendanceStatus.지각) / 3);
+	public static AttendanceInterview getInterview(Map<AttendanceStatus, Long> attendanceStatusCount) {
+		long notComeCount = attendanceStatusCount.get(AttendanceStatus.결석) + (attendanceStatusCount.get(AttendanceStatus.지각) / 3);
 		if (notComeCount < 2) {
 			return 대상자_아님;
 		}

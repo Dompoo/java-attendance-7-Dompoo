@@ -2,6 +2,7 @@ package attendance.io.input;
 
 import attendance.common.dto.request.AttendanceFindRequest;
 import attendance.common.dto.request.AttendanceModifyRequest;
+import attendance.common.dto.request.AttendanceRequest;
 import attendance.io.reader.Reader;
 import attendance.io.writer.Writer;
 
@@ -19,11 +20,11 @@ public class InputHandler {
 		this.inputParser = inputParser;
 	}
 	
-	public AttendanceFindRequest handleAttendanceFind() {
+	public AttendanceRequest handleAttendance() {
 		writer.write("닉네임을 입력해 주세요.");
 		String input = reader.readLine();
 		inputValidator.validateNickName(input);
-		return new AttendanceFindRequest(inputParser.parseNickName(input));
+		return new AttendanceRequest(inputParser.parseNickName(input));
 	}
 	
 	public AttendanceModifyRequest handleAttendanceModify() {
@@ -43,5 +44,12 @@ public class InputHandler {
 				inputParser.parseDate(date),
 				inputParser.parseTime(time)
 		);
+	}
+	
+	public AttendanceFindRequest handleAttendanceFind() {
+		writer.write("닉네임을 입력해 주세요.");
+		String input = reader.readLine();
+		inputValidator.validateNickName(input);
+		return new AttendanceFindRequest(inputParser.parseNickName(input));
 	}
 }

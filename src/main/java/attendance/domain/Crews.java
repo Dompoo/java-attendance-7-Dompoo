@@ -1,33 +1,22 @@
-package attendance.infra.repository;
+package attendance.domain;
 
 import attendance.common.CustomExceptions;
 import attendance.common.dto.result.AttendanceExpellWarningResult;
 import attendance.common.dto.result.AttendanceFindResults;
 import attendance.common.dto.result.AttendanceModifyResult;
 import attendance.common.dto.result.AttendanceResult;
-import attendance.domain.AttendanceInterview;
-import attendance.domain.Crew;
-import attendance.infra.database.FileDatabase;
-import attendance.infra.domainConvertor.AttendanceEntityToCrewConvertor;
-import attendance.infra.entity.AttendanceEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-public class CrewRepository {
+public class Crews {
 	
 	private final List<Crew> crews;
 	
-	public CrewRepository(List<Crew> crews) {
+	public Crews(List<Crew> crews) {
 		this.crews = crews;
-	}
-	
-	public static CrewRepository from(FileDatabase<AttendanceEntity> attendanceEntityFileDatabase) {
-		List<AttendanceEntity> attendanceEntities = attendanceEntityFileDatabase.readAll();
-		List<Crew> crews = AttendanceEntityToCrewConvertor.convert(attendanceEntities);
-		return new CrewRepository(crews);
 	}
 	
 	public AttendanceResult addAttendanceByNameAndTime(String nickname, LocalDateTime attendanceDateTime) {

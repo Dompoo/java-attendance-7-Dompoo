@@ -2,7 +2,7 @@ package attendance;
 
 import attendance.controller.AttendanceController;
 import attendance.infra.database.AttendanceFileDatabase;
-import attendance.infra.repository.CrewRepository;
+import attendance.infra.repository.CrewsRepository;
 import attendance.io.input.InputHandler;
 import attendance.io.input.InputParser;
 import attendance.io.input.InputValidator;
@@ -19,7 +19,7 @@ public class Application {
                 new InputHandler(new ConsoleReader(), writer, new InputValidator(), new InputParser()),
                 new OutputHandler(writer, new OutputParser()),
                 new LocalDateProvider(),
-                CrewRepository.from(new AttendanceFileDatabase())
+                CrewsRepository.from(new AttendanceFileDatabase())
         ).run();
     }
 }

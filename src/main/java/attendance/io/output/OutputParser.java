@@ -16,7 +16,7 @@ import java.util.Map;
 public class OutputParser {
 	
 	public String parseAttendance(LocalDateTime localDateTime, AttendanceStatus attendanceStatus) {
-		return "%2d월 %2d일 %s %2d:%2d (%s)".formatted(
+		return "%02d월 %02d일 %s %02d:%02d (%s)\n".formatted(
 				localDateTime.getMonthValue(),
 				localDateTime.getDayOfMonth(),
 				KoreanDayOfWeek.from(localDateTime.getDayOfWeek()).name(),
@@ -27,7 +27,7 @@ public class OutputParser {
 	}
 	
 	public String parseAttendanceModify(AttendanceModifyResult attendanceModifyResult) {
-		return "%2d월 %2d일 %s %2d:%2d (%s) -> %2d:%2d (%s) 수정 완료!".formatted(
+		return "%02d월 %02d일 %s %02d:%02d (%s) -> %02d:%02d (%s) 수정 완료!\n".formatted(
 				attendanceModifyResult.attendanceDate().getMonthValue(),
 				attendanceModifyResult.attendanceDate().getDayOfMonth(),
 				KoreanDayOfWeek.from(attendanceModifyResult.attendanceDate().getDayOfWeek()).name(),
@@ -42,7 +42,7 @@ public class OutputParser {
 	
 	public String parseAttendanceFind(AttendanceFindResults attendanceFindResults) {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("이번 달 %s의 출석 기록입니다.".formatted(attendanceFindResults.nickname()));
+		stringBuilder.append("이번 달 %s의 출석 기록입니다.\n".formatted(attendanceFindResults.nickname()));
 		for (AttendanceFindResult attendanceFindResult : attendanceFindResults.attendanceFindResults()) {
 			stringBuilder.append(parseAttendance(attendanceFindResult.attendanceDateTime(), attendanceFindResult.attendanceStatus())).append("\n");
 		}
@@ -54,16 +54,16 @@ public class OutputParser {
 	
 	private String parseAttendanceInterview(AttendanceInterview attendanceInterview) {
 		if (attendanceInterview.equals(AttendanceInterview.대상자_아님)) {
-			return "";
+			return "\n";
 		}
-		return "%s입니다.".formatted(attendanceInterview.getFormattedName());
+		return "%s입니다.\n".formatted(attendanceInterview.getFormattedName());
 	}
 	
 	private String parseAttendanceStatusCount(Map<AttendanceStatus, Long> map) {
 		StringBuilder stringBuilder = new StringBuilder();
 		EnumMap<AttendanceStatus, Long> attendanceStatusCount = new EnumMap<>(map);
 		for (Map.Entry<AttendanceStatus, Long> entry : attendanceStatusCount.entrySet()) {
-			stringBuilder.append("%s: %d회".formatted(entry.getKey().name(), entry.getValue())).append("\n");
+			stringBuilder.append("%s: %d회\n".formatted(entry.getKey().name(), entry.getValue())).append("\n");
 		}
 		
 		return stringBuilder.toString();

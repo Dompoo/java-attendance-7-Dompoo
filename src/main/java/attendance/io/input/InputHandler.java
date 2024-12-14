@@ -26,6 +26,7 @@ public class InputHandler {
 	
 	public AttendanceFeatureCommand handleFeatureSelect(LocalDate localDate) {
 		writer.write("""
+				
 				오늘은 %d월 %d일 토요일입니다. 기능을 선택해 주세요.
 				1. 출석 확인
 				2. 출석 수정
@@ -37,9 +38,9 @@ public class InputHandler {
 	}
 	
 	public AttendanceRequest handleAttendance(LocalDate localDate) {
-		writer.write("닉네임을 입력해 주세요.");
+		writer.write("\n닉네임을 입력해 주세요.\n");
 		String nickName = reader.readLine();
-		writer.write("등교 시간을 입력해 주세요.");
+		writer.write("등교 시간을 입력해 주세요.\n");
 		String time = reader.readLine();
 		inputValidator.validateNickName(nickName);
 		inputValidator.validateTime(time);
@@ -50,11 +51,11 @@ public class InputHandler {
 	}
 	
 	public AttendanceModifyRequest handleAttendanceModify() {
-		writer.write("출석을 수정하려는 크루의 닉네임을 입력해 주세요.");
+		writer.write("\n출석을 수정하려는 크루의 닉네임을 입력해 주세요.\n");
 		String nickName = reader.readLine();
-		writer.write("수정하려는 날짜(일)를 입력해 주세요.");
+		writer.write("수정하려는 날짜(일)를 입력해 주세요.\n");
 		String date = reader.readLine();
-		writer.write("언제로 변경하겠습니까?");
+		writer.write("언제로 변경하겠습니까?\n");
 		String time = reader.readLine();
 		
 		inputValidator.validateNickName(nickName);
@@ -69,7 +70,7 @@ public class InputHandler {
 	}
 	
 	public AttendanceFindRequest handleAttendanceFind() {
-		writer.write("닉네임을 입력해 주세요.");
+		writer.write("\n닉네임을 입력해 주세요.\n");
 		String input = reader.readLine();
 		inputValidator.validateNickName(input);
 		return new AttendanceFindRequest(inputParser.parseNickName(input));

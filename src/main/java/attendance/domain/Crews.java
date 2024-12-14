@@ -55,13 +55,14 @@ public class Crews {
 		return findCrew.getAttendanceFindResult(now);
 	}
 	
-	public List<AttendanceExpellWarningResult> findExpellWarnings() {
+	public List<AttendanceExpellWarningResult> findExpellWarnings(LocalDate now) {
 		return crews.stream()
-				.map(Crew::getAttendanceExpellWaringResult)
+				.map(crew -> crew.getAttendanceExpellWaringResult(now))
 				.filter(attendanceExpellWarningResult -> {
 					AttendanceInterview attendanceInterview = attendanceExpellWarningResult.attendanceInterview();
 					return attendanceInterview.equals(AttendanceInterview.면담_대상자) || attendanceInterview.equals(AttendanceInterview.경고_대상자);
 				})
+				.sorted()
 				.toList();
 	}
 }

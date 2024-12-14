@@ -9,8 +9,8 @@ public record AttendanceExpellWarningResult(
 		AttendanceInterview attendanceInterview
 ) implements Comparable<AttendanceExpellWarningResult> {
 	
-	public int calculateNotComeTime() {
-		return (int) notComeCount + 3 * (int) lateCount;
+	public int addNotComeCountAndLateCount() {
+		return (int) notComeCount + (int) lateCount;
 	}
 	
 	@Override
@@ -18,8 +18,8 @@ public record AttendanceExpellWarningResult(
 		if (attendanceInterview != o.attendanceInterview) {
 			return o.attendanceInterview.ordinal() - attendanceInterview.ordinal();
 		}
-		if (calculateNotComeTime() != o.calculateNotComeTime()) {
-			return o.calculateNotComeTime() - calculateNotComeTime();
+		if (addNotComeCountAndLateCount() != o.addNotComeCountAndLateCount()) {
+			return addNotComeCountAndLateCount() - o.addNotComeCountAndLateCount();
 		}
 		return nickname.compareTo(o.nickname);
 	}

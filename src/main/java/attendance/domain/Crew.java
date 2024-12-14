@@ -25,11 +25,10 @@ public class Crew {
 	}
 	
 	public AttendanceFindResults getAttendanceFindResult(LocalDate now) {
-		List<AttendanceFindResult> attendanceFindResultsEmut = attendances.stream()
+		List<AttendanceFindResult> attendanceFindResults = new ArrayList<>(attendances.stream()
 				.map(Attendance::toAttendanceFindResult)
-				.toList();
-		
-		ArrayList<AttendanceFindResult> attendanceFindResults = new ArrayList<>(attendanceFindResultsEmut);
+				.sorted()
+				.toList());
 		
 		List<LocalDate> validDates = now.withDayOfMonth(1).datesUntil(now)
 				.filter(localdate -> localdate.getDayOfWeek() != DayOfWeek.SATURDAY && localdate.getDayOfWeek() != DayOfWeek.SUNDAY)
@@ -83,9 +82,26 @@ public class Crew {
 		return attendanceStatusCount;
 	}
 	
-	public AttendanceExpellWarningResult getAttendanceExpellWaringResult() {
-		EnumMap<AttendanceStatus, Long> attendanceStatusCount = getAttendanceStatusCount(0);
-		
+	public AttendanceExpellWarningResult getAttendanceExpellWaringResult(LocalDate now) {
+		List<AttendanceFindResult> attendanceFindResultsEmut = attendances.stream()
+				.map(Attendance::toAttendanceFindResult)
+				.toList();
+		ArrayList<AttendanceFindResult> attendanceFindResults = new ArrayList<>(attendanceFindResultsEmut);
+		List<LocalDate> validDates = now.withDayOfMonth(1).datesUntil(now)
+				.filter(localdate -> localdate.getDayOfWeek() != DayOfWeek.SATURDAY && localdate.getDayOfWeek() != DayOfWeek.SUNDAY)
+				.filter(localdate -> !LegalHolidayCalendar.isLegalHoliday(localdate))
+				.toList();
+		Map<LocalDate, AttendanceFindResult> resultMap = attendanceFindResults.stream().collect(Collectors.toMap(
+				result -> result.attendanceDateTime().toLocalDate(),
+				result -> result
+		));
+		int addedNoComeCount = 0;
+		for (LocalDate validDate : validDates) {
+			if (!resultMap.containsKey(validDate)) {
+				addedNoComeCount++;
+			}
+		}
+		EnumMap<AttendanceStatus, Long> attendanceStatusCount = getAttendanceStatusCount(addedNoComeCount);
 		return new AttendanceExpellWarningResult(nickname, attendanceStatusCount.get(AttendanceStatus.결석), attendanceStatusCount.get(AttendanceStatus.지각), AttendanceInterview.getInterview(attendanceStatusCount));
 	}
 	

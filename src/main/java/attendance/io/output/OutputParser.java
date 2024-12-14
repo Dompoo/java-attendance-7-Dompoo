@@ -65,7 +65,8 @@ public class OutputParser {
 		StringBuilder stringBuilder = new StringBuilder();
 		Collections.sort(attendanceFindResults);
 		
-		for (AttendanceFindResult result : attendanceFindResults) {
+		List<AttendanceFindResult> distinctResult = attendanceFindResults.stream().distinct().toList();
+		for (AttendanceFindResult result : distinctResult) {
 			if (result.isCome()) {
 				stringBuilder.append(parseAttendance(result.attendanceDateTime(), result.attendanceStatus()));
 				continue;
@@ -97,8 +98,8 @@ public class OutputParser {
 	public String parseAttendanceExpellWarnings(List<AttendanceExpellWarningResult> attendanceExpellWarningResults) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("제적 위험자 조회 결과").append("\n");
-		Collections.sort(attendanceExpellWarningResults);
-		for (AttendanceExpellWarningResult attendanceExpellWarningResult : attendanceExpellWarningResults) {
+		List<AttendanceExpellWarningResult> distinctResult = attendanceExpellWarningResults.stream().distinct().toList();
+		for (AttendanceExpellWarningResult attendanceExpellWarningResult : distinctResult) {
 			stringBuilder.append("- %s: 결석 %d회, 지각 %d회 (%s)".formatted(
 					attendanceExpellWarningResult.nickname(),
 					attendanceExpellWarningResult.notComeCount(),

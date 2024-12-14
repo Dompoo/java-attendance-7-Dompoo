@@ -60,7 +60,7 @@ public class AttendanceController {
 				continue;
 			}
 			if (command.equals(AttendanceFeatureCommand.제적_위험_확인)) {
-				List<AttendanceExpellWarningResult> result = crews.findExpellWarnings();
+				List<AttendanceExpellWarningResult> result = crews.findExpellWarnings(dateProvider.date());
 				outputHandler.handleAttendanceExpellWarning(result);
 				continue;
 			}

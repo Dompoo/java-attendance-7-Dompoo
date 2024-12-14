@@ -10,6 +10,10 @@ public enum CustomExceptions {
             "이미 출석을 확인하였습니다. 필요한 경우 수정 기능을 이용해 주세요.",
             IllegalArgumentException.class
     ),
+    INVALID_ATTENDANCE_TIME(
+            "캠퍼스 운영 시간에만 출석이 가능합니다.",
+            IllegalArgumentException.class
+    ),
     INVALID_ATTENDANCE_DATE(
             "%d월 %d일 %s은 등교일이 아닙니다.",
             IllegalArgumentException.class

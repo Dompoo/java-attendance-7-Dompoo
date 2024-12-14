@@ -14,12 +14,15 @@ import java.util.List;
 public class Attendance {
 	
 	private static final List<DayOfWeek> validAttendanceDayOfWeek = List.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY);
-
+	private static final LocalTime validAttendanceStartTime = LocalTime.of(8, 0);
+	private static final LocalTime validAttendanceEndTime = LocalTime.of(23, 0);
+	
 	private final LocalDateTime attendanceDateTime;
 	private final AttendanceStatus attendanceStatus;
 	
 	public Attendance(LocalDateTime attendanceDateTime, AttendanceStatus attendanceStatus) {
 		validateValidAttendanceDate(attendanceDateTime.toLocalDate());
+		validateValidAttendTime(attendanceDateTime.toLocalTime());
 		this.attendanceDateTime = attendanceDateTime;
 		this.attendanceStatus = attendanceStatus;
 	}
@@ -27,6 +30,12 @@ public class Attendance {
 	private void validateValidAttendanceDate(LocalDate localDate) {
 		if (LegalHolidayCalendar.isLegalHoliday(localDate) || !validAttendanceDayOfWeek.contains(localDate.getDayOfWeek())) {
 			throw CustomExceptions.INVALID_ATTENDANCE_DATE.get(localDate.getMonthValue(), localDate.getDayOfMonth(), KoreanDayOfWeek.from(localDate.getDayOfWeek()).name());
+		}
+	}
+	
+	private void validateValidAttendTime(LocalTime localTime) {
+		if (validAttendanceStartTime.isAfter(localTime) || validAttendanceEndTime.isBefore(localTime)) {
+			throw CustomExceptions.INVALID_ATTENDANCE_TIME.get();
 		}
 	}
 	

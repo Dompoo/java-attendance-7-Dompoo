@@ -1,4 +1,4 @@
-package attendance.infra;
+package attendance.common;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

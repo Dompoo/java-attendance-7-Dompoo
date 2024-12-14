@@ -1,4 +1,4 @@
-package attendance.infra.repository.domainConvertor;
+package attendance.infra.domainConvertor;
 
 import attendance.domain.Attendance;
 import attendance.domain.Crew;

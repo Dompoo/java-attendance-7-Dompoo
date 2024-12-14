@@ -8,8 +8,8 @@ import attendance.common.dto.result.AttendanceResult;
 import attendance.domain.AttendanceInterview;
 import attendance.domain.Crew;
 import attendance.infra.database.FileDatabase;
+import attendance.infra.domainConvertor.AttendanceEntityToCrewConvertor;
 import attendance.infra.entity.AttendanceEntity;
-import attendance.infra.repository.domainConvertor.AttendanceEntityToCrewConvertor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

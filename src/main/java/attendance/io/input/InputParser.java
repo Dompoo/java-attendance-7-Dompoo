@@ -1,6 +1,6 @@
 package attendance.io.input;
 
-import attendance.infra.DateTimeConvertor;
+import attendance.common.DateTimeConvertor;
 
 import java.time.LocalTime;
 

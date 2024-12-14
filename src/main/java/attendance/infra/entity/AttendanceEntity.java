@@ -1,7 +1,7 @@
 package attendance.infra.entity;
 
+import attendance.common.DateTimeConvertor;
 import attendance.domain.Attendance;
-import attendance.infra.DateTimeConvertor;
 
 import java.time.LocalDateTime;
 

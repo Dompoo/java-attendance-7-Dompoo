@@ -27,13 +27,17 @@ public class Attendance {
 		this.attendanceStatus = attendanceStatus;
 	}
 	
-	private void validateValidAttendanceDate(LocalDate localDate) {
+	public static void isAttendanceValid(LocalDate localDate) {
+		validateValidAttendanceDate(localDate);
+	}
+	
+	private static void validateValidAttendanceDate(LocalDate localDate) {
 		if (LegalHolidayCalendar.isLegalHoliday(localDate) || !validAttendanceDayOfWeek.contains(localDate.getDayOfWeek())) {
 			throw CustomExceptions.INVALID_ATTENDANCE_DATE.get(localDate.getMonthValue(), localDate.getDayOfMonth(), KoreanDayOfWeek.from(localDate.getDayOfWeek()).name());
 		}
 	}
 	
-	private void validateValidAttendTime(LocalTime localTime) {
+	private static void validateValidAttendTime(LocalTime localTime) {
 		if (validAttendanceStartTime.isAfter(localTime) || validAttendanceEndTime.isBefore(localTime)) {
 			throw CustomExceptions.INVALID_ATTENDANCE_TIME.get();
 		}
@@ -58,7 +62,7 @@ public class Attendance {
 	}
 	
 	public AttendanceFindResult toAttendanceFindResult() {
-		return new AttendanceFindResult(attendanceDateTime, attendanceStatus);
+		return new AttendanceFindResult(attendanceDateTime, attendanceStatus, true);
 	}
 	
 	public boolean isAttendanceDateEquals(LocalDate localDate) {

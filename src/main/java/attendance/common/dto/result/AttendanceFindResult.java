@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 
 public record AttendanceFindResult(
 		LocalDateTime attendanceDateTime,
-		AttendanceStatus attendanceStatus
+		AttendanceStatus attendanceStatus,
+		boolean isCome
 ) implements Comparable<AttendanceFindResult> {
 	
 	@Override

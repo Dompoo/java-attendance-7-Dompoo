@@ -7,16 +7,13 @@ import attendance.common.dto.result.AttendanceModifyResult;
 import attendance.domain.AttendanceInterview;
 import attendance.domain.AttendanceStatus;
 import attendance.domain.KoreanDayOfWeek;
-import attendance.domain.LegalHolidayCalendar;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class OutputParser {
 	
@@ -53,38 +50,29 @@ public class OutputParser {
 		);
 	}
 	
-	public String parseAttendanceFind(LocalDate now,  AttendanceFindResults attendanceFindResults) {
+	public String parseAttendanceFind(AttendanceFindResults attendanceFindResults) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("이번 달 %s의 출석 기록입니다.\n".formatted(attendanceFindResults.nickname()));
 		
-		stringBuilder.append(parseAttenanceFindResult(now, attendanceFindResults.attendanceFindResults()));
+		stringBuilder.append(parseAttenanceFindResult(attendanceFindResults.attendanceFindResults()));
 		stringBuilder.append(parseAttendanceStatusCount(attendanceFindResults.attendanceStatusCount()));
 		stringBuilder.append(parseAttendanceInterview(attendanceFindResults.attendanceInterview()));
 		
 		return stringBuilder.toString();
 	}
 	
-	private String parseAttenanceFindResult(LocalDate now, List<AttendanceFindResult> attendanceFindResults) {
+	private String parseAttenanceFindResult(List<AttendanceFindResult> attendanceFindResults) {
 		StringBuilder stringBuilder = new StringBuilder();
+		Collections.sort(attendanceFindResults);
 		
-		List<LocalDate> validDates = now.withDayOfMonth(1).datesUntil(now)
-				.filter(localdate -> localdate.getDayOfWeek() != DayOfWeek.SATURDAY && localdate.getDayOfWeek() != DayOfWeek.SUNDAY)
-				.filter(localdate -> !LegalHolidayCalendar.isLegalHoliday(localdate))
-				.toList();
-		
-		Map<LocalDate, AttendanceFindResult> resultMap = attendanceFindResults.stream().collect(Collectors.toMap(
-				result -> result.attendanceDateTime().toLocalDate(),
-				result -> result
-		));
-		
-		for (LocalDate validDate : validDates) {
-			if (resultMap.containsKey(validDate)) {
-				AttendanceFindResult result = resultMap.get(validDate);
+		for (AttendanceFindResult result : attendanceFindResults) {
+			if (result.isCome()) {
 				stringBuilder.append(parseAttendance(result.attendanceDateTime(), result.attendanceStatus()));
 				continue;
 			}
-			stringBuilder.append(parseNoAttendance(validDate));
+			stringBuilder.append(parseNoAttendance(result.attendanceDateTime().toLocalDate()));
 		}
+		
 		return stringBuilder.toString();
 	}
 	

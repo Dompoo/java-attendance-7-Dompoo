@@ -6,7 +6,6 @@ import attendance.common.dto.result.AttendanceModifyResult;
 import attendance.common.dto.result.AttendanceResult;
 import attendance.io.writer.Writer;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class OutputHandler {
@@ -29,8 +28,8 @@ public class OutputHandler {
 		writer.write(output);
 	}
 	
-	public void handleAttendanceFindResults(LocalDate now,  AttendanceFindResults attendanceFindResults) {
-		String output = outputParser.parseAttendanceFind(now, attendanceFindResults);
+	public void handleAttendanceFindResults(AttendanceFindResults attendanceFindResults) {
+		String output = outputParser.parseAttendanceFind(attendanceFindResults);
 		writer.write(output);
 	}
 	

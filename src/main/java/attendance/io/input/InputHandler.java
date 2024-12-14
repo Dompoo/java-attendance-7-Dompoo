@@ -3,7 +3,6 @@ package attendance.io.input;
 import attendance.common.dto.request.AttendanceFeatureCommand;
 import attendance.common.dto.request.AttendanceFindRequest;
 import attendance.common.dto.request.AttendanceModifyRequest;
-import attendance.common.dto.request.AttendanceRequest;
 import attendance.io.reader.Reader;
 import attendance.io.writer.Writer;
 
@@ -37,33 +36,35 @@ public class InputHandler {
 		return AttendanceFeatureCommand.from(reader.readLine());
 	}
 	
-	public AttendanceRequest handleAttendance(LocalDate localDate) {
+	public String handleAttendanceNickname() {
 		writer.write("\n닉네임을 입력해 주세요.\n");
 		String nickName = reader.readLine();
+		inputValidator.validateNickName(nickName);
+		return inputParser.parseNickName(nickName);
+	}
+	
+	public LocalDateTime handleAttendanceTime(LocalDate localDate) {
 		writer.write("등교 시간을 입력해 주세요.\n");
 		String time = reader.readLine();
-		inputValidator.validateNickName(nickName);
 		inputValidator.validateTime(time);
-		return new AttendanceRequest(
-				inputParser.parseNickName(nickName),
-				LocalDateTime.of(localDate, inputParser.parseTime(time))
-		);
+		return LocalDateTime.of(localDate, inputParser.parseTime(time));
+	}
+	
+	public String handleAttendanceModifyNickname() {
+		writer.write("\n출석을 수정하려는 크루의 닉네임을 입력해 주세요.\n");
+		String nickName = reader.readLine();
+		inputValidator.validateNickName(nickName);
+		return inputParser.parseNickName(nickName);
 	}
 	
 	public AttendanceModifyRequest handleAttendanceModify() {
-		writer.write("\n출석을 수정하려는 크루의 닉네임을 입력해 주세요.\n");
-		String nickName = reader.readLine();
 		writer.write("수정하려는 날짜(일)를 입력해 주세요.\n");
 		String date = reader.readLine();
 		writer.write("언제로 변경하겠습니까?\n");
 		String time = reader.readLine();
-		
-		inputValidator.validateNickName(nickName);
 		inputValidator.validateDate(date);
 		inputValidator.validateTime(time);
-		
 		return new AttendanceModifyRequest(
-				inputParser.parseNickName(nickName),
 				inputParser.parseDate(date),
 				inputParser.parseTime(time)
 		);

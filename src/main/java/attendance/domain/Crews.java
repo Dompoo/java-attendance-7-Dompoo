@@ -19,6 +19,15 @@ public class Crews {
 		this.crews = crews;
 	}
 	
+	public void validateValidCrew(String nickname) {
+		boolean isCrewExist = crews.stream()
+				.anyMatch(crew -> crew.getNickname().equals(nickname));
+		
+		if (!isCrewExist) {
+			throw CustomExceptions.CREW_NOT_FOUND.get();
+		}
+	}
+	
 	public AttendanceResult addAttendanceByNameAndTime(String nickname, LocalDateTime attendanceDateTime) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
@@ -37,13 +46,13 @@ public class Crews {
 		return findCrew.modifyAttendance(now, now.withDayOfMonth(requestDay), time);
 	}
 	
-	public AttendanceFindResults findAttendancesByName(String nickname) {
+	public AttendanceFindResults findAttendancesByName(String nickname, LocalDate now) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
 				.findFirst()
 				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
 		
-		return findCrew.getAttendanceFindResult();
+		return findCrew.getAttendanceFindResult(now);
 	}
 	
 	public List<AttendanceExpellWarningResult> findExpellWarnings() {

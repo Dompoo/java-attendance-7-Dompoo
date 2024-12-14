@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public class Crews {
 	
@@ -19,9 +20,7 @@ public class Crews {
 		this.crews = crews;
 	}
 	
-	// TODO : 주말 및 공휴일 검증
-	// TODO : 이미 출석한 경우 수정 기능을 이용하도록 안내
-	public AttendanceResult addAttendanceByNameAndTime(String nickname, LocalDateTime attendanceDateTime) {
+	public Optional<AttendanceResult> addAttendanceByNameAndTime(String nickname, LocalDateTime attendanceDateTime) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
 				.findFirst()

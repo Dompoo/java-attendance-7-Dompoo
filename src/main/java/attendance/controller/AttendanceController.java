@@ -15,6 +15,7 @@ import attendance.io.output.OutputHandler;
 import attendance.service.DateProvider;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AttendanceController {
 	
@@ -36,8 +37,12 @@ public class AttendanceController {
 			Crews crews = crewsRepository.getCrews();
 			if (command.equals(AttendanceFeatureCommand.출석)) {
 				AttendanceRequest request = inputHandler.handleAttendance(dateProvider.date());
-				AttendanceResult result = crews.addAttendanceByNameAndTime(request.nickname(), request.attendanceTime());
-				outputHandler.handleAttendanceResult(result);
+				Optional<AttendanceResult> result = crews.addAttendanceByNameAndTime(request.nickname(), request.attendanceTime());
+				if (result.isPresent()) {
+					outputHandler.handleAttendanceResult(result.get());
+					continue;
+				}
+				outputHandler.handleAlreadyAttend();
 				continue;
 			}
 			if (command.equals(AttendanceFeatureCommand.출석_수정)) {

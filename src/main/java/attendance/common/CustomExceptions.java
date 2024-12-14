@@ -6,6 +6,10 @@ public enum CustomExceptions {
             "등록되지 않은 출석입니다.",
             IllegalArgumentException.class
     ),
+    INVALID_ATTENDANCE_DATE(
+            "%d월 %d일 %s은 등교일이 아닙니다.",
+            IllegalArgumentException.class
+    ),
     CREW_NOT_FOUND(
             "등록되지 않은 닉네임입니다.",
             IllegalArgumentException.class
@@ -28,9 +32,9 @@ public enum CustomExceptions {
         this.exceptionType = exceptionType;
     }
 
-    public RuntimeException get() {
+    public RuntimeException get(Object... args) {
         try {
-            return exceptionType.getDeclaredConstructor(String.class).newInstance(message);
+            return exceptionType.getDeclaredConstructor(String.class).newInstance(message.formatted(args));
         } catch (Exception e) {
             return new RuntimeException(message);
         }

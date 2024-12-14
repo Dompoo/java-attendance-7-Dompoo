@@ -6,22 +6,23 @@ import attendance.common.dto.result.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Crew {
 	
-	private final String name;
+	private final String nickname;
 	private final List<Attendance> attendances;
 	
-	public Crew(String name, List<Attendance> attendances) {
-		this.name = name;
-		this.attendances = attendances;
+	public Crew(String nickname, List<Attendance> attendances) {
+		this.nickname = nickname;
+		this.attendances = new ArrayList<>(attendances);
 	}
 	
-	public String getName() {
-		return name;
+	public String getNickname() {
+		return nickname;
 	}
 	
 	public AttendanceFindResults getAttendanceFindResult() {
@@ -33,7 +34,7 @@ public class Crew {
 				.map(AttendanceFindResult::attendanceStatus)
 				.collect(Collectors.groupingBy(attendanceStatus -> attendanceStatus, Collectors.counting()));
 		
-		return new AttendanceFindResults(name, attendanceFindResults, attendanceStatusCount, AttendanceInterview.getInterview(attendanceStatusCount));
+		return new AttendanceFindResults(nickname, attendanceFindResults, attendanceStatusCount, AttendanceInterview.getInterview(attendanceStatusCount));
 	}
 	
 	public AttendanceResult addAttendance(LocalDateTime localDateTime) {
@@ -48,16 +49,16 @@ public class Crew {
 				.map(AttendanceFindResult::attendanceStatus)
 				.collect(Collectors.groupingBy(attendanceStatus -> attendanceStatus, Collectors.counting()));
 		
-		return new AttendanceExpellWarningResult(name, attendanceStatusCount.get(AttendanceStatus.결석), attendanceStatusCount.get(AttendanceStatus.지각), AttendanceInterview.getInterview(attendanceStatusCount));
+		return new AttendanceExpellWarningResult(nickname, attendanceStatusCount.get(AttendanceStatus.결석), attendanceStatusCount.get(AttendanceStatus.지각), AttendanceInterview.getInterview(attendanceStatusCount));
 	}
 	
-	public AttendanceModifyResult modifyAttendance(LocalDate attendanceDate, LocalTime time) {
+	public AttendanceModifyResult modifyAttendance(LocalDate attendanceDate, LocalTime attendanceTime) {
 		Attendance beforeModifyAttendance = attendances.stream()
 				.filter(attendance -> attendance.isAttendanceDateEquals(attendanceDate))
 				.findFirst()
 				.orElseThrow(CustomExceptions.ATTENDANCE_NOT_FOUND::get);
 		
-		Attendance modifiedAttendance = beforeModifyAttendance.with(time);
+		Attendance modifiedAttendance = beforeModifyAttendance.with(attendanceTime);
 		
 		attendances.remove(beforeModifyAttendance);
 		attendances.add(modifiedAttendance);

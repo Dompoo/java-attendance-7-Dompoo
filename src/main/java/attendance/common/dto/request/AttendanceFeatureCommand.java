@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public enum AttendanceFeatureCommand {
 	
-	출석_확인("1"),
+	출석("1"),
 	출석_수정("2"),
 	크루별_출석_기록_확인("3"),
 	제적_위험_확인("4"),

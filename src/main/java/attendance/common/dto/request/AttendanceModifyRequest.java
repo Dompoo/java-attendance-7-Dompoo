@@ -4,7 +4,7 @@ import java.time.LocalTime;
 
 public record AttendanceModifyRequest(
 		String nickname,
-		int date,
+		int day,
 		LocalTime time
 ) {
 }

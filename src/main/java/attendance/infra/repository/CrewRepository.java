@@ -30,9 +30,9 @@ public class CrewRepository {
 		return new CrewRepository(crews);
 	}
 	
-	public AttendanceResult addAttendanceByNameAndTime(String name, LocalDateTime attendanceDateTime) {
+	public AttendanceResult addAttendanceByNameAndTime(String nickname, LocalDateTime attendanceDateTime) {
 		Crew findCrew = crews.stream()
-				.filter(crew -> crew.getName().equals(name))
+				.filter(crew -> crew.getNickname().equals(nickname))
 				.findFirst()
 				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
 		
@@ -40,18 +40,18 @@ public class CrewRepository {
 	}
 	
 	// TODO : 미래 날짜 수정 검증
-	public AttendanceModifyResult modifyAttendance(String name, LocalDate now, int date, LocalTime time) {
+	public AttendanceModifyResult modifyAttendance(String nickname, LocalDate date, LocalTime time) {
 		Crew findCrew = crews.stream()
-				.filter(crew -> crew.getName().equals(name))
+				.filter(crew -> crew.getNickname().equals(nickname))
 				.findFirst()
 				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
 		
-		return findCrew.modifyAttendance(now.withDayOfMonth(date), time);
+		return findCrew.modifyAttendance(date, time);
 	}
 	
-	public AttendanceFindResults findAttendancesByName(String name) {
+	public AttendanceFindResults findAttendancesByName(String nickname) {
 		Crew findCrew = crews.stream()
-				.filter(crew -> crew.getName().equals(name))
+				.filter(crew -> crew.getNickname().equals(nickname))
 				.findFirst()
 				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
 		

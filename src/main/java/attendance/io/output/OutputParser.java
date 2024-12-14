@@ -1,5 +1,6 @@
 package attendance.io.output;
 
+import attendance.common.dto.result.AttendanceExpellWarningResult;
 import attendance.common.dto.result.AttendanceFindResult;
 import attendance.common.dto.result.AttendanceFindResults;
 import attendance.common.dto.result.AttendanceModifyResult;
@@ -9,6 +10,7 @@ import attendance.domain.KoreanDayOfWeek;
 
 import java.time.LocalDateTime;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public class OutputParser {
@@ -64,6 +66,20 @@ public class OutputParser {
 			stringBuilder.append("%s: %d회".formatted(entry.getKey().name(), entry.getValue())).append("\n");
 		}
 		
+		return stringBuilder.toString();
+	}
+	
+	public String parseAttendanceExpellWarnings(List<AttendanceExpellWarningResult> attendanceExpellWarningResults) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("제적 위험자 조회 결과").append("\n");
+		for (AttendanceExpellWarningResult attendanceExpellWarningResult : attendanceExpellWarningResults) {
+			stringBuilder.append("- %s: 결석 %d회, 지각 %d회 (%s)".formatted(
+					attendanceExpellWarningResult.nickname(),
+					attendanceExpellWarningResult.notComeCount(),
+					attendanceExpellWarningResult.lateCount(),
+					attendanceExpellWarningResult.attendanceInterview().getSimpleName()
+			)).append("\n");
+		}
 		return stringBuilder.toString();
 	}
 }

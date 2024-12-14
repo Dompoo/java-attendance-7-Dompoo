@@ -35,6 +35,8 @@ public enum CustomExceptions {
             IllegalStateException.class
     )
     ;
+    
+    private static final String MESSAGE_PREFIX = "[ERROR] ";
 
     private final String message;
     private final Class<? extends RuntimeException> exceptionType;
@@ -46,7 +48,7 @@ public enum CustomExceptions {
 
     public RuntimeException get(Object... args) {
         try {
-            return exceptionType.getDeclaredConstructor(String.class).newInstance(message.formatted(args));
+            return exceptionType.getDeclaredConstructor(String.class).newInstance(MESSAGE_PREFIX + message.formatted(args));
         } catch (Exception e) {
             return new RuntimeException(message);
         }

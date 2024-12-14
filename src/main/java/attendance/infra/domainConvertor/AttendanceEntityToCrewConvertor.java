@@ -22,6 +22,7 @@ public class AttendanceEntityToCrewConvertor {
 	private static List<String> convertToNickNames(List<AttendanceEntity> attendanceEntities) {
 		return attendanceEntities.stream()
 				.map(AttendanceEntity::nickname)
+				.distinct()
 				.toList();
 	}
 	

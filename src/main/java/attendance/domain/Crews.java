@@ -19,6 +19,8 @@ public class Crews {
 		this.crews = crews;
 	}
 	
+	// TODO : 주말 및 공휴일 검증
+	// TODO : 이미 출석한 경우 수정 기능을 이용하도록 안내
 	public AttendanceResult addAttendanceByNameAndTime(String nickname, LocalDateTime attendanceDateTime) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
@@ -29,6 +31,7 @@ public class Crews {
 	}
 	
 	// TODO : 미래 날짜 수정 검증
+	// TODO : 아직 출석하지 않은 날짜를 수정하려고 할 경우 그냥 추가
 	public AttendanceModifyResult modifyAttendance(String nickname, LocalDate date, LocalTime time) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
@@ -38,6 +41,8 @@ public class Crews {
 		return findCrew.modifyAttendance(date, time);
 	}
 	
+	// TODO : 등교하지 않아 출석 기록이 없는 날은 결석으로 간주
+	// TODO : 오늘을 제외하고 전날까지만 반환
 	public AttendanceFindResults findAttendancesByName(String nickname) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
@@ -47,7 +52,7 @@ public class Crews {
 		return findCrew.getAttendanceFindResult();
 	}
 	
-	//TODO : 정렬 해야함
+	// TODO : 정렬
 	public List<AttendanceExpellWarningResult> findExpellWarnings() {
 		return crews.stream()
 				.map(Crew::getAttendanceExpellWaringResult)

@@ -10,6 +10,10 @@ public enum CustomExceptions {
             "%d월 %d일 %s은 등교일이 아닙니다.",
             IllegalArgumentException.class
     ),
+    INVALID_MODIFY(
+            "아직 수정할 수 없습니다.",
+            IllegalArgumentException.class
+    ),
     CREW_NOT_FOUND(
             "등록되지 않은 닉네임입니다.",
             IllegalArgumentException.class

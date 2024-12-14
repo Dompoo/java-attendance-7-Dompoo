@@ -29,15 +29,14 @@ public class Crews {
 		return findCrew.addAttendance(attendanceDateTime);
 	}
 	
-	// TODO : 미래 날짜 수정 검증
 	// TODO : 아직 출석하지 않은 날짜를 수정하려고 할 경우 그냥 추가
-	public AttendanceModifyResult modifyAttendance(String nickname, LocalDate date, LocalTime time) {
+	public AttendanceModifyResult modifyAttendance(String nickname, LocalDate now, int requestDay, LocalTime time) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
 				.findFirst()
 				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
 		
-		return findCrew.modifyAttendance(date, time);
+		return findCrew.modifyAttendance(now, now.withDayOfMonth(requestDay), time);
 	}
 	
 	// TODO : 등교하지 않아 출석 기록이 없는 날은 결석으로 간주

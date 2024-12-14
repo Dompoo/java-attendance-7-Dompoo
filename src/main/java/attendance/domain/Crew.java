@@ -60,7 +60,10 @@ public class Crew {
 		return new AttendanceExpellWarningResult(nickname, attendanceStatusCount.get(AttendanceStatus.결석), attendanceStatusCount.get(AttendanceStatus.지각), AttendanceInterview.getInterview(attendanceStatusCount));
 	}
 	
-	public AttendanceModifyResult modifyAttendance(LocalDate attendanceDate, LocalTime attendanceTime) {
+	public AttendanceModifyResult modifyAttendance(LocalDate now, LocalDate attendanceDate, LocalTime attendanceTime) {
+		if (now.isBefore(attendanceDate)) {
+			throw CustomExceptions.INVALID_MODIFY.get();
+		}
 		Attendance beforeModifyAttendance = attendances.stream()
 				.filter(attendance -> attendance.isAttendanceDateEquals(attendanceDate))
 				.findFirst()

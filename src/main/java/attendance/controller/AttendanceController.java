@@ -47,7 +47,7 @@ public class AttendanceController {
 			}
 			if (command.equals(AttendanceFeatureCommand.출석_수정)) {
 				AttendanceModifyRequest request = inputHandler.handleAttendanceModify();
-				AttendanceModifyResult result = crews.modifyAttendance(request.nickname(), dateProvider.date().withDayOfMonth(request.day()), request.time());
+				AttendanceModifyResult result = crews.modifyAttendance(request.nickname(), dateProvider.date(), request.day(), request.time());
 				outputHandler.handleAttendanceModifyResult(result);
 				continue;
 			}

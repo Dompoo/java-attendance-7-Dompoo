@@ -9,7 +9,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Crew {
@@ -38,17 +37,15 @@ public class Crew {
 		return new AttendanceFindResults(nickname, attendanceFindResults, attendanceStatusCount, AttendanceInterview.getInterview(attendanceStatusCount));
 	}
 	
-	public Optional<AttendanceResult> addAttendance(LocalDateTime localDateTime) {
+	public AttendanceResult addAttendance(LocalDateTime localDateTime) {
 		boolean isAttendanceAlreadyExist = attendances.stream()
 				.anyMatch(attendance -> attendance.isAttendanceDateEquals(localDateTime.toLocalDate()));
-		
 		if (isAttendanceAlreadyExist) {
-			Optional.empty();
+			throw CustomExceptions.ALREADY_ATTEND.get();
 		}
-		
 		Attendance newAttendance = Attendance.from(localDateTime);
 		attendances.add(newAttendance);
-		return Optional.of(newAttendance.toAttendanceResult());
+		return newAttendance.toAttendanceResult();
 	}
 	
 	public AttendanceExpellWarningResult getAttendanceExpellWaringResult() {

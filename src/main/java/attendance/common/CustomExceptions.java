@@ -6,6 +6,10 @@ public enum CustomExceptions {
             "등록되지 않은 출석입니다.",
             IllegalArgumentException.class
     ),
+    ALREADY_ATTEND(
+            "이미 출석을 확인하였습니다. 필요한 경우 수정 기능을 이용해 주세요.",
+            IllegalArgumentException.class
+    ),
     INVALID_ATTENDANCE_DATE(
             "%d월 %d일 %s은 등교일이 아닙니다.",
             IllegalArgumentException.class

@@ -37,8 +37,4 @@ public class OutputHandler {
 		String output = outputParser.parseAttendanceExpellWarnings(attendanceExpellWarningResults);
 		writer.write(output);
 	}
-	
-	public void handleAlreadyAttend() {
-		writer.write("이미 출석하셨습니다. 시간을 변경하려면 수정 기능을 사용해주세요.\n");
-	}
 }

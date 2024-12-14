@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 public class Crews {
 	
@@ -20,7 +19,7 @@ public class Crews {
 		this.crews = crews;
 	}
 	
-	public Optional<AttendanceResult> addAttendanceByNameAndTime(String nickname, LocalDateTime attendanceDateTime) {
+	public AttendanceResult addAttendanceByNameAndTime(String nickname, LocalDateTime attendanceDateTime) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
 				.findFirst()

@@ -2,6 +2,10 @@ package attendance.common;
 
 public enum CustomExceptions {
     
+    ATTENDANCE_NOT_FOUND(
+            "등록되지 않은 출석입니다.",
+            IllegalArgumentException.class
+    ),
     CREW_NOT_FOUND(
             "등록되지 않은 닉네임입니다.",
             IllegalArgumentException.class

@@ -1,13 +1,16 @@
 package attendance.infra.repository;
 
 import attendance.common.CustomExceptions;
+import attendance.common.dto.AttendanceModifyResult;
 import attendance.common.dto.AttendanceResult;
 import attendance.domain.Crew;
 import attendance.infra.database.FileDatabase;
 import attendance.infra.entity.AttendanceEntity;
 import attendance.infra.repository.domainConvertor.AttendanceEntityToCrewConvertor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public class CrewRepository {
@@ -24,14 +27,21 @@ public class CrewRepository {
 		return new CrewRepository(crews);
 	}
 	
-	public AttendanceResult addAttendanceByNameAndTime(String name, LocalDateTime localDateTime) {
+	public AttendanceResult addAttendanceByNameAndTime(String name, LocalDateTime attendanceDateTime) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getName().equals(name))
 				.findFirst()
 				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
 		
-		return findCrew.addAttendance(localDateTime);
+		return findCrew.addAttendance(attendanceDateTime);
 	}
 	
-	
+	public AttendanceModifyResult modifyAttendance(String name, LocalDate now, int date, LocalTime time) {
+		Crew findCrew = crews.stream()
+				.filter(crew -> crew.getName().equals(name))
+				.findFirst()
+				.orElseThrow(CustomExceptions.CREW_NOT_FOUND::get);
+		
+		return findCrew.modifyAttendance(now.withDayOfMonth(date), time);
+	}
 }

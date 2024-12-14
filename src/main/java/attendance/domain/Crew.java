@@ -6,8 +6,10 @@ import attendance.common.dto.result.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.List;
 
 public class Crew {
 	
@@ -28,9 +30,7 @@ public class Crew {
 				.map(Attendance::toAttendanceFindResult)
 				.toList();
 		
-		Map<AttendanceStatus, Long> attendanceStatusCount = attendanceFindResults.stream()
-				.map(AttendanceFindResult::attendanceStatus)
-				.collect(Collectors.groupingBy(attendanceStatus -> attendanceStatus, Collectors.counting()));
+		EnumMap<AttendanceStatus, Long> attendanceStatusCount = getAttendanceStatusCount();
 		
 		return new AttendanceFindResults(nickname, attendanceFindResults, attendanceStatusCount, AttendanceInterview.getInterview(attendanceStatusCount));
 	}
@@ -46,7 +46,7 @@ public class Crew {
 		return newAttendance.toAttendanceResult();
 	}
 	
-	public AttendanceExpellWarningResult getAttendanceExpellWaringResult() {
+	private EnumMap<AttendanceStatus, Long> getAttendanceStatusCount() {
 		EnumMap<AttendanceStatus, Long> attendanceStatusCount = new EnumMap<>(AttendanceStatus.class);
 		
 		Arrays.stream(AttendanceStatus.values())
@@ -56,6 +56,11 @@ public class Crew {
 				.map(Attendance::toAttendanceFindResult)
 				.map(AttendanceFindResult::attendanceStatus)
 				.forEach(attendanceStatus -> attendanceStatusCount.put(attendanceStatus, attendanceStatusCount.get(attendanceStatus) + 1));
+		return attendanceStatusCount;
+	}
+	
+	public AttendanceExpellWarningResult getAttendanceExpellWaringResult() {
+		EnumMap<AttendanceStatus, Long> attendanceStatusCount = getAttendanceStatusCount();
 		
 		return new AttendanceExpellWarningResult(nickname, attendanceStatusCount.get(AttendanceStatus.결석), attendanceStatusCount.get(AttendanceStatus.지각), AttendanceInterview.getInterview(attendanceStatusCount));
 	}

@@ -50,7 +50,7 @@ public class DefaultAttendanceController implements AttendanceController {
 			if (command.equals(AttendanceFeatureCommand.크루별_출석_기록_확인)) {
 				AttendanceFindRequest request = inputHandler.handleAttendanceFind();
 				AttendanceFindResults result = crews.findAttendancesByName(request.nickname());
-				outputHandler.handleAttendanceFindResults(result);
+				outputHandler.handleAttendanceFindResults(dateProvider.date(), result);
 				continue;
 			}
 			if (command.equals(AttendanceFeatureCommand.제적_위험_확인)) {

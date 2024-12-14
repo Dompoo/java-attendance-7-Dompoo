@@ -7,11 +7,15 @@ import attendance.common.dto.result.AttendanceModifyResult;
 import attendance.domain.AttendanceInterview;
 import attendance.domain.AttendanceStatus;
 import attendance.domain.KoreanDayOfWeek;
+import attendance.domain.LegalHolidayCalendar;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class OutputParser {
 	
@@ -23,6 +27,14 @@ public class OutputParser {
 				localDateTime.toLocalTime().getHour(),
 				localDateTime.toLocalTime().getMinute(),
 				attendanceStatus.name()
+		);
+	}
+	
+	public String parseNoAttendance(LocalDate localDate) {
+		return "%02d월 %02d일 %s --:-- (결석)\n".formatted(
+				localDate.getMonthValue(),
+				localDate.getDayOfMonth(),
+				KoreanDayOfWeek.from(localDate.getDayOfWeek()).name()
 		);
 	}
 	
@@ -40,15 +52,38 @@ public class OutputParser {
 		);
 	}
 	
-	public String parseAttendanceFind(AttendanceFindResults attendanceFindResults) {
+	public String parseAttendanceFind(LocalDate now,  AttendanceFindResults attendanceFindResults) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("이번 달 %s의 출석 기록입니다.\n".formatted(attendanceFindResults.nickname()));
-		for (AttendanceFindResult attendanceFindResult : attendanceFindResults.attendanceFindResults()) {
-			stringBuilder.append(parseAttendance(attendanceFindResult.attendanceDateTime(), attendanceFindResult.attendanceStatus())).append("\n");
-		}
 		
+		stringBuilder.append(parseAttenanceFindResult(now, attendanceFindResults.attendanceFindResults()));
 		stringBuilder.append(parseAttendanceStatusCount(attendanceFindResults.attendanceStatusCount()));
 		stringBuilder.append(parseAttendanceInterview(attendanceFindResults.attendanceInterview()));
+		
+		return stringBuilder.toString();
+	}
+	
+	private String parseAttenanceFindResult(LocalDate now, List<AttendanceFindResult> attendanceFindResults) {
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		List<LocalDate> validDates = now.withDayOfMonth(1).datesUntil(now)
+				.filter(localdate -> localdate.getDayOfWeek() != DayOfWeek.SATURDAY && localdate.getDayOfWeek() != DayOfWeek.SUNDAY)
+				.filter(localdate -> !LegalHolidayCalendar.isLegalHoliday(localdate))
+				.toList();
+		
+		Map<LocalDate, AttendanceFindResult> resultMap = attendanceFindResults.stream().collect(Collectors.toMap(
+				result -> result.attendanceDateTime().toLocalDate(),
+				result -> result
+		));
+		
+		for (LocalDate validDate : validDates) {
+			if (resultMap.containsKey(validDate)) {
+				AttendanceFindResult result = resultMap.get(validDate);
+				stringBuilder.append(parseAttendance(result.attendanceDateTime(), result.attendanceStatus()));
+				continue;
+			}
+			stringBuilder.append(parseNoAttendance(validDate));
+		}
 		return stringBuilder.toString();
 	}
 	
@@ -61,9 +96,10 @@ public class OutputParser {
 	
 	private String parseAttendanceStatusCount(Map<AttendanceStatus, Long> map) {
 		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("\n");
 		EnumMap<AttendanceStatus, Long> attendanceStatusCount = new EnumMap<>(map);
 		for (Map.Entry<AttendanceStatus, Long> entry : attendanceStatusCount.entrySet()) {
-			stringBuilder.append("%s: %d회\n".formatted(entry.getKey().name(), entry.getValue())).append("\n");
+			stringBuilder.append("%s: %d회\n".formatted(entry.getKey().name(), entry.getValue()));
 		}
 		
 		return stringBuilder.toString();

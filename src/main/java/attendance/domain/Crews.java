@@ -28,7 +28,6 @@ public class Crews {
 		return findCrew.addAttendance(attendanceDateTime);
 	}
 	
-	// TODO : 아직 출석하지 않은 날짜를 수정하려고 할 경우 그냥 추가
 	public AttendanceModifyResult modifyAttendance(String nickname, LocalDate now, int requestDay, LocalTime time) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))
@@ -38,8 +37,6 @@ public class Crews {
 		return findCrew.modifyAttendance(now, now.withDayOfMonth(requestDay), time);
 	}
 	
-	// TODO : 등교하지 않아 출석 기록이 없는 날은 결석으로 간주
-	// TODO : 오늘을 제외하고 전날까지만 반환
 	public AttendanceFindResults findAttendancesByName(String nickname) {
 		Crew findCrew = crews.stream()
 				.filter(crew -> crew.getNickname().equals(nickname))

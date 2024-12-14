@@ -1,5 +1,7 @@
 package attendance.domain;
 
+import attendance.common.dto.AttendanceResult;
+
 import java.time.LocalDateTime;
 
 public class Attendance {
@@ -14,5 +16,9 @@ public class Attendance {
 	
 	public static Attendance from(LocalDateTime attendanceDateTime) {
 		return new Attendance(attendanceDateTime, AttendanceStatus.getAttendanceStatus(attendanceDateTime));
+	}
+	
+	public AttendanceResult toAttendanceResult() {
+		return new AttendanceResult(attendanceDateTime, attendanceStatus);
 	}
 }
